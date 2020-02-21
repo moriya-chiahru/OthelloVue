@@ -1,113 +1,64 @@
 <template>
   <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        nuxt-ts
-      </h1>
-      <h2 class="subtitle">
-        {{ $vxm.users.fullname }}'s swell Nuxt.js project
-      </h2>
-      <div class="links">
-        <a href="https://nuxtjs.org/" target="_blank" class="button--green">
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
+    <template v-for="y in board.length">
+      <div v-for="x in board[y - 1].length" :key="`${y}-${x}`" class="cell">
+        <div
+          v-if="board[y - 1][x]"
+          :class="['stone', canPut(x - 1, y - 1) ? 'white' : 'black']"
+        />
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'nuxt-property-decorator'
-import Logo from '~/components/atoms/Logo.vue'
+import { Component, Vue } from 'nuxt-property-decorator'
 
-@Component({
-  components: { Logo }
-})
+@Component
 export default class extends Vue {
-  @Prop()
-  test!: {
-    hoge: string
+  get canPut() {
+    return (x: number, y: number) => x % 2 === y % 2
   }
 
-  async mounted() {
-    await this.$vxm.users.doAnotherAsyncStuff(0)
-  }
+  board = [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+  ]
 }
 </script>
 
 <style scoped>
-/* autoprefixer grid: no-autoplace */
 .container {
-  display: grid;
-
-  /* Caution: `min-height: 100vh` does not work in IE 11 */
-  height: 100vh;
-  margin: 0 auto;
-  text-align: center;
-
-  /* Caution: `1fr` has different results in IE 11 */
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  width: 480px;
+  height: 480px;
+  margin: 20px auto;
+  background: #050;
 }
 
-.container > div {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
+.cell {
+  float: left;
+  width: 12.5%;
+  height: 12.5%;
+  border: 1px solid #000;
 }
 
-.title {
-  font-size: 100px;
-  font-weight: 300;
-  color: #35495e;
-  letter-spacing: 1px;
+.stone {
+  width: 70%;
+  height: 70%;
+  margin: 15%;
+  border-radius: 50%;
+}
+.white {
+  background: #fff;
 }
 
-.subtitle {
-  padding-bottom: 15px;
-  font-size: 42px;
-  font-weight: 300;
-  color: #526488;
-  word-spacing: 5px;
-}
-
-.links {
-  padding-top: 15px;
-}
-
-.button--green {
-  display: inline-block;
-  padding: 10px 30px;
-  color: #3b8070;
-  text-decoration: none;
-  border: 1px solid;
-  border-radius: 4px;
-}
-
-.button--green:hover {
-  color: #fff;
-  background-color: #3b8070;
-}
-
-.button--grey {
-  display: inline-block;
-  padding: 10px 30px;
-  margin-left: 15px;
-  color: #35495e;
-  text-decoration: none;
-  border: 1px solid;
-  border-radius: 4px;
-}
-
-.button--grey:hover {
-  color: #fff;
-  background-color: #35495e;
+.black {
+  background: #000;
 }
 </style>
