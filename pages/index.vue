@@ -3,7 +3,7 @@
     <template v-for="y in board.length">
       <div v-for="x in board[y - 1].length" :key="`${y}-${x}`" class="cell">
         <div
-          v-if="board[y - 1][x]"
+          v-if="board[y - 1][x - 1]"
           :class="['stone', canPut(x - 1, y - 1) ? 'white' : 'black']"
         />
       </div>
@@ -24,8 +24,8 @@ export default class extends Vue {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
