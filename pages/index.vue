@@ -3,7 +3,7 @@
     <template v-for="y in board.length">
       <div v-for="x in board[y - 1].length" :key="`${y}-${x}`" class="cell">
         <div
-          v-if="board[y - 1][x - 1]"
+          v-if="hasStone(x - 1, y - 1)"
           :class="['stone', canPut(x - 1, y - 1) ? 'white' : 'black']"
         />
       </div>
@@ -16,8 +16,12 @@ import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component
 export default class extends Vue {
+  get hasStone() {
+    return (x: number, y: number): boolean => Boolean(this.board[x][y])
+  }
+
   get canPut() {
-    return (x: number, y: number) => x % 2 === y % 2
+    return (x: number, y: number): boolean => x % 2 === y % 2
   }
 
   board = [
