@@ -43,9 +43,12 @@ export default class extends Vue {
   currentColor = 1
 
   onClick(x: number, y: number) {
+    // 周りに石があれば石を置く
+    // if () {
     this.currentColor = 3 - this.currentColor
     this.board = JSON.parse(JSON.stringify(this.board))
     this.board[y][x] = this.currentColor
+    // }
   }
 }
 </script>
