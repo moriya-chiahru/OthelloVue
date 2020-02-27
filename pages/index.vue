@@ -1,7 +1,12 @@
 <template>
   <div class="container">
     <template v-for="y in board.length">
-      <div v-for="x in board[y - 1].length" :key="`${y}-${x}`" class="cell">
+      <div
+        v-for="x in board[y - 1].length"
+        :key="`${y}-${x}`"
+        class="cell"
+        @click="onClick(x - 1, y - 1)"
+      >
         <div
           v-if="hasStone(x - 1, y - 1)"
           :class="['stone', isBlack(x - 1, y - 1) ? 'white' : 'black']"
@@ -27,13 +32,18 @@ export default class extends Vue {
   board = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 1, -1, 0, 0, 0],
     [0, 0, 0, -1, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ]
+
+  onClick(x: number, y: number) {
+    this.board = JSON.parse(JSON.stringify(this.board))
+    this.board[y][x] = -1
+  }
 }
 </script>
 
