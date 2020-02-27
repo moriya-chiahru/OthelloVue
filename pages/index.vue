@@ -33,16 +33,19 @@ export default class extends Vue {
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 1, -1, 0, 0, 0],
-    [0, 0, 0, -1, 1, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0]
   ]
 
+  currentColor = 1
+
   onClick(x: number, y: number) {
+    this.currentColor = 3 - this.currentColor
     this.board = JSON.parse(JSON.stringify(this.board))
-    this.board[y][x] = -1
+    this.board[y][x] = this.currentColor
   }
 }
 </script>
