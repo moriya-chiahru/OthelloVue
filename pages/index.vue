@@ -29,6 +29,28 @@ export default class extends Vue {
     return (x: number, y: number): boolean => this.board[y][x] === 1
   }
 
+  get hasVicinity() {
+    return (x: number, y: number): boolean => {
+      let result: boolean = false
+      for (let yIndex: number = -1; yIndex < 2; yIndex++) {
+        for (let xIndex: number = -1; xIndex < 2; xIndex++) {
+          if (
+            this.board[y + yIndex] &&
+            this.board[y + yIndex][x + xIndex] &&
+            this.board[y + yIndex][x + xIndex] !== 0
+          ) {
+            result = true
+            break
+          }
+        }
+        if (result) {
+          break
+        }
+      }
+      return result
+    }
+  }
+
   board = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -43,12 +65,12 @@ export default class extends Vue {
   currentColor = 1
 
   onClick(x: number, y: number) {
-    // 周りに石があれば石を置く
-    // if () {
-    this.currentColor = 3 - this.currentColor
-    this.board = JSON.parse(JSON.stringify(this.board))
-    this.board[y][x] = this.currentColor
-    // }
+    if (!this.hasStone(x, y) && this.hasVicinity(x, y)) {
+      this.currentColor = 3 - this.currentColor
+      // onClick関数の処理が終わってからbordの値の更新を予約する
+      this.board = JSON.parse(JSON.stringify(this.board))
+      this.board[y][x] = this.currentColor
+    }
   }
 }
 </script>
