@@ -29,15 +29,32 @@ export default class extends Vue {
     return (x: number, y: number): boolean => this.board[y][x] === 1
   }
 
-  get puttableCells(): { x: number; y: number }[] {
-    return this.board
-      .flatMap((row, y) => row.map((color, x) => ({ x, y, color })))
-      .filter((cell) => {
-        // homework!
-        return !!cell
-        // 周りのセルの位置を返す
-        // 置いていることはダメ、置けるセルはOK
-      })
+  get puttableCells() {
+    return (
+      currentX: number,
+      currentY: number
+    ): { x: number; y: number; color: number }[] => {
+      return this.board
+        .flatMap((row, y) => {
+          return row.map((color, x) => ({ x, y, color }))
+        })
+        .filter((cell) => {
+          return (
+            (cell.x === currentX ||
+              cell.x === currentX + 1 ||
+              cell.x === currentX - 1) &&
+            cell.color !== 0
+          )
+        })
+        .filter((cell) => {
+          return (
+            (cell.y === currentY ||
+              cell.y === currentY + 1 ||
+              cell.y === currentY - 1) &&
+            cell.color !== 0
+          )
+        })
+    }
   }
 
   board = [
@@ -54,7 +71,11 @@ export default class extends Vue {
   currentColor = 1
 
   onClick(x: number, y: number) {
-    if (this.puttableCells.find((cell) => cell.x === x && cell.y === y)) {
+    const circumference = this.puttableCells(x, y)
+    if (
+      circumference.length !== 0 &&
+      !circumference.some((cell) => cell.x === x && cell.y === y)
+    ) {
       this.currentColor = 3 - this.currentColor
       // onClick関数の処理が終わってからbordの値の更新を予約する
       this.board = JSON.parse(JSON.stringify(this.board))
