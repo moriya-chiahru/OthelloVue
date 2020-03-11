@@ -29,26 +29,15 @@ export default class extends Vue {
     return (x: number, y: number): boolean => this.board[y][x] === 1
   }
 
-  get hasVicinity() {
-    return (x: number, y: number): boolean => {
-      let result: boolean = false
-      for (let yIndex: number = -1; yIndex < 2; yIndex++) {
-        for (let xIndex: number = -1; xIndex < 2; xIndex++) {
-          if (
-            this.board[y + yIndex] &&
-            this.board[y + yIndex][x + xIndex] &&
-            this.board[y + yIndex][x + xIndex] !== 0
-          ) {
-            result = true
-            break
-          }
-        }
-        if (result) {
-          break
-        }
-      }
-      return result
-    }
+  get puttableCells(): { x: number; y: number }[] {
+    return this.board
+      .flatMap((row, y) => row.map((color, x) => ({ x, y, color })))
+      .filter((cell) => {
+        // homework!
+        return !!cell
+        // 周りのセルの位置を返す
+        // 置いていることはダメ、置けるセルはOK
+      })
   }
 
   board = [
@@ -65,7 +54,7 @@ export default class extends Vue {
   currentColor = 1
 
   onClick(x: number, y: number) {
-    if (!this.hasStone(x, y) && this.hasVicinity(x, y)) {
+    if (this.puttableCells.find((cell) => cell.x === x && cell.y === y)) {
       this.currentColor = 3 - this.currentColor
       // onClick関数の処理が終わってからbordの値の更新を予約する
       this.board = JSON.parse(JSON.stringify(this.board))
