@@ -39,9 +39,24 @@ export default class extends Vue {
     return this.board
       .flatMap((row, y) => row.map((color, x) => ({ x, y, color })))
       .filter((cell) => {
-        // homework!
-        return !!cell
+        return cell.color === 0
       })
+      .filter((cell) => {
+        if (
+          this.board[cell.y - 1] &&
+          this.board[cell.y - 1][cell.x - 1] !== 0 &&
+          this.board[cell.y - 1][cell.x - 1] !== undefined &&
+          this.board[cell.y - 1][cell.x - 1] !== 0
+        ) {
+          return true
+        }
+        return false
+      })
+  }
+
+  get canPut() {
+    return (x: number, y: number): boolean =>
+      this.puttableCells.some((cell) => cell.x === x && cell.y === y)
   }
 
   // prettier-ignore
@@ -59,11 +74,7 @@ export default class extends Vue {
   currentColor = 1
 
   onClick(x: number, y: number) {
-    const canPut = this.puttableCells.some(
-      (cell) => cell.x === x && cell.y === y
-    )
-
-    if (canPut) {
+    if (this.canPut(x, y)) {
       this.board = JSON.parse(JSON.stringify(this.board))
       this.board[y][x] = this.currentColor
       this.currentColor = 3 - this.currentColor
